@@ -32,14 +32,20 @@ public class Main {
 			num=0;
 			do {
 				System.out.println("1.Search and Book");
-	//			System.out.println("2.Signup");
-				System.out.println("2.Exit");
+				System.out.println("2.Cancel Ticket");
+				System.out.println("3.Exit");
 				num = myReader.nextInt();
 				myReader.nextLine();
 				
-			} while (num<1 || num>2);
+			} while (num<1 || num>3);
 			if (num==1) {
 				admin.searchAndBook(user);
+			}
+			if (num==2) {
+				admin.ticketCancelation(user);
+			}
+			if (num==3) {
+				return;
 			}
 		}
 //		myReader.close();

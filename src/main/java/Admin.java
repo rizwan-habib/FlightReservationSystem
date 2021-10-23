@@ -34,8 +34,70 @@ public class Admin {
 	public void setFlights(ArrayList<Flight> flights) {
 		this.flights = flights;
 	}
-	public void ticketCancelation() {
-		
+	public void ticketCancelation(Passenger user) {
+		Scanner myReader = new Scanner(System.in);
+		System.out.print("Enter Origin: ");
+		String origin=myReader.nextLine();
+		System.out.print("Enter Destination: ");
+		String destination=myReader.nextLine();
+		System.out.print("Enter seat no: ");
+		int seat=myReader.nextInt();
+		myReader.nextLine();
+//		
+//		Flight f;
+		int index=0;
+		boolean flag=false;
+		for (int i = 0; i < flights.size(); i++) {
+			for (int j = 0; j < flights.get(i).getTickets().size(); j++) {
+//				System.out.println(flights.get(i).getTickets().get(j).getDestination());
+				if(origin.equals(flights.get(i).getTickets().get(j).getOrigin()) 
+						&& destination.equals(flights.get(i).getTickets().get(j).getDestination()) 
+						&& user.getPassportNumber().equals(flights.get(i).getTickets().get(j).getPassenger().getPassportNumber()) 
+						&& (seat-1)==flights.get(i).getTickets().get(j).getSeatNo()	
+								) {
+					flag=true;
+					index=i;
+//					t=j;
+					flights.get(i).getTickets().remove(j);
+				}	
+			}
+		}
+		if (flag) {
+			File fold=new File(flights.get(index).getOrigin()+flights.get(index).getDestination()+flights.get(index).getDate()+".csv");
+			fold.delete();
+			File file = new File(flights.get(index).getOrigin()+flights.get(index).getDestination()+flights.get(index).getDate()+".csv");
+		    boolean isFileCreated;
+			try {
+				isFileCreated = file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			File fnew=new File(flights.get(index).getOrigin()+flights.get(index).getDestination()+flights.get(index).getDate()+".csv");
+//			String source = textArea.getText();
+//			System.out.println(source);
+			Flight f=flights.get(index);
+			try {
+			    FileWriter f2 = new FileWriter(fnew, false);
+			    for (int i = 0; i < flights.get(index).getTickets().size(); i++) {
+//			    	f2.write();
+				    if(file.length()!=0) {
+				    	f2.write("\n"+f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
+				    }
+				    else {
+				       	f2.write(f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
+				    }
+
+				}
+			    
+			    f2.close();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}  
+		}
+		else {
+			System.out.println("Ticket didn't found");
+		}
 	}
 	public void signup() {
 		Scanner myReader = new Scanner(System.in);
@@ -201,6 +263,7 @@ public class Admin {
 			
 		}
 	}
+	
 	public void searchAndBook(Passenger user) {
 		Scanner myObj = new Scanner(System.in);
 		System.out.print("Enter Departure City: ");
