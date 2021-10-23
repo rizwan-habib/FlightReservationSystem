@@ -42,7 +42,13 @@ public class Main {
 				admin.searchAndBook(user);
 			}
 			if (num==2) {
-				admin.ticketCancelation(user);
+				try {
+					admin.ticketCancelation(user);
+				} catch (Exception e) {
+					// TODO: handle exception
+					 System.err.print(e);
+				}
+				
 			}
 			if (num==3) {
 				return;

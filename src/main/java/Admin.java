@@ -34,7 +34,7 @@ public class Admin {
 	public void setFlights(ArrayList<Flight> flights) {
 		this.flights = flights;
 	}
-	public void ticketCancelation(Passenger user) {
+	public void ticketCancelation(Passenger user) throws SeatNotFoundException   {
 		Scanner myReader = new Scanner(System.in);
 		System.out.print("Enter Origin: ");
 		String origin=myReader.nextLine();
@@ -97,7 +97,8 @@ public class Admin {
 			}  
 		}
 		else {
-			System.out.println("Ticket didn't found");
+			throw new SeatNotFoundException(
+	                "Could not find Ticket ");
 		}
 	}
 	public void signup() {
