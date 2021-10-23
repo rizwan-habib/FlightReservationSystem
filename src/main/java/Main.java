@@ -49,11 +49,13 @@ public class Main {
 				do {
 					System.out.println("1.Search and Book");
 					System.out.println("2.Cancel Ticket");
-					System.out.println("3.Exit");
+					System.out.println("3.Modify Reservation");
+					System.out.println("4.Print Ticket");
+					System.out.println("5.Exit");
 					num = myReader.nextInt();
 					myReader.nextLine();
 					
-				} while (num<1 || num>3);
+				} while (num<1 || num>5);
 				if (num==1) {
 					try {
 						manager.searchAndBook(user);
@@ -72,7 +74,13 @@ public class Main {
 					}
 					
 				}
-				if (num==3) {
+				if(num==3) {
+					manager.modifyreservation(user);
+				}
+				if(num==4) {
+					manager.printTicket(user);
+				}
+				if (num==5) {
 					return;
 				}
 			}

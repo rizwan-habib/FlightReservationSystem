@@ -101,6 +101,51 @@ public class ManagerClass {
 		}
 	    
 	}
+	public void printTicket(Passenger user) {
+		Scanner myReader = new Scanner(System.in);
+		System.out.print("Enter Origin: ");
+		String origin=myReader.nextLine();
+		System.out.print("Enter Destination: ");
+		String destination=myReader.nextLine();
+		System.out.print("Enter year: ");
+		String year=myReader.nextLine();
+		System.out.print("Enter month(1-12): ");
+		String month=myReader.nextLine();
+		System.out.print("Enter day(1-31): ");
+		String day=myReader.nextLine();
+		String date=day+"_"+month+"_"+year;	
+        String filename=Paths.get(".").toAbsolutePath().normalize().toString();
+		boolean flag=false;
+//		File file=new File(filename);
+//		if(file.exists() && !file.isDirectory()) { 
+//		    
+//		}
+		for (int i = 0; i < flights.size(); i++) {
+			for (int j = 0; j < flights.get(i).getTickets().size(); j++) {
+				if (flights.get(i).getTickets().get(j).getOrigin().equals(origin) 
+						&& flights.get(i).getTickets().get(j).getDestination().equals(destination)
+						&& flights.get(i).getTickets().get(j).getDate().equals(date)
+						&& user.getPassportNumber().equals(flights.get(i).getTickets().get(j).getPassenger().getPassportNumber())
+						) {
+					
+					System.out.println("Origion: "+flights.get(i).getTickets().get(j).getOrigin());
+					System.out.println("Destination: "+flights.get(i).getTickets().get(j).getDestination());
+					System.out.println("Flight Type: "+flights.get(i).getTickets().get(j).getFlightType());
+					System.out.println("Date: "+flights.get(i).getTickets().get(j).getDate());
+//					System.out.println("Origion: "+flights.get(i).getTickets().get(j).g);
+					System.out.println("Seat No: "+flights.get(i).getTickets().get(j).getSeatNo());
+					System.out.println("Passenger Name: "+flights.get(i).getTickets().get(j).getPassenger().getName());
+					System.out.println("Passport No: "+flights.get(i).getTickets().get(j).getPassenger().getPassportNumber());
+					System.out.println();
+					System.out.println();
+				}
+				
+			}
+			
+		}
+//		File[] list = file.listFiles();
+		
+	}
 	public void flightCancelation() throws CanNotFoundFlight {
 		Scanner myReader = new Scanner(System.in);
 		System.out.print("Enter Origin: ");
@@ -183,7 +228,30 @@ public class ManagerClass {
 	                "Could not delete Flight ");
 		}
 	}
-	public void ticketCancelation(Passenger user) throws SeatNotFoundException   {
+	public void modifyreservation(Passenger user) {
+		System.out.print("Enter Data of already booked ticket: ");
+		
+		boolean flag=false;
+		try {
+			flag=ticketCancelation(user);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println(e);
+//			System.out.println("")
+		}
+		if(flag) {
+			try {
+				System.out.print("Enter Data for new ticket: ");
+				
+				searchAndBook(user);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.err.println(e);
+			}
+			
+		}
+	}
+	public boolean ticketCancelation(Passenger user) throws SeatNotFoundException   {
 		Scanner myReader = new Scanner(System.in);
 		System.out.print("Enter Origin: ");
 		String origin=myReader.nextLine();
@@ -229,17 +297,23 @@ public class ManagerClass {
 			Flight f=flights.get(index);
 			try {
 			    FileWriter f2 = new FileWriter(fnew, false);
-			    for (int i = 0; i < flights.get(index).getTickets().size(); i++) {
-//			    	f2.write();
-				    if(file.length()!=0) {
-				    	f2.write("\n"+f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
-				    }
-				    else {
-				       	f2.write(f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
-				    }
+			    if(flights.get(index).getTickets().size()>0) {
+			    	for (int i = 0; i < flights.get(index).getTickets().size(); i++) {
+//				    	f2.write();
+					    if(file.length()!=0) {
+					    	f2.write("\n"+f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
+					    }
+					    else {
+					       	f2.write(f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+f.getTickets().get(i).getSeatNo()+","+f.getTickets().get(i).getPassenger().getName()+","+f.getTickets().get(i).getPassenger().getPassportNumber()+","+f.getTickets().get(i).getPassenger().getAddress()+","+f.getTickets().get(i).getPassenger().getAge()+","+f.getTickets().get(i).getPassenger().getUsername()+","+f.getTickets().get(i).getPassenger().getPassword());
+					    }
 
-				}
-			    
+					}
+			    }
+			    else {
+			    	f2.close();
+			    	file.delete();
+			    	System.out.println(file.getName());
+			    }
 			    f2.close();
 			} catch (IOException e) {
 			    e.printStackTrace();
@@ -249,6 +323,7 @@ public class ManagerClass {
 			throw new SeatNotFoundException(
 	                "Could not find Ticket ");
 		}
+		return flag;
 	}
 	public void signup() {
 
