@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -32,6 +33,9 @@ public class Admin {
 
 	public void setFlights(ArrayList<Flight> flights) {
 		this.flights = flights;
+	}
+	public void ticketCancelation() {
+		
 	}
 	public void signup() {
 		Scanner myReader = new Scanner(System.in);
@@ -152,6 +156,50 @@ public class Admin {
 	      System.out.println("An error occurred.");
 	      e.printStackTrace();
 	    }
+		File file=new File(Paths.get(".").toAbsolutePath().normalize().toString());
+		File[] list = file.listFiles();
+        
+//        System.out.println("jkl");
+		for (int i = 0; i < flights.size(); i++) {
+			if(list!=null)
+	        for (File fil : list)
+	        {
+	            if (!fil.isDirectory())
+	            {
+//	            	System.out.println(fil.getName());
+//	            	System.out.println("matched");
+	            	if(fil.getName().equals(flights.get(i).getOrigin()+flights.get(i).getDestination()+flights.get(i).getDate()+".csv")) {
+	            		System.out.println("matched");
+	            		try {
+	        				File myObj = new File(fil.getName());
+	        				Scanner myReader = new Scanner(myObj);
+	        				while (myReader.hasNextLine()) {
+	        			        String data = myReader.nextLine();
+	        			        String[] arrOfStr = data.split(",");
+        				    	Ticket ticket=new Ticket();
+        				        ticket.setOrigin(arrOfStr[0]);
+        				        ticket.setDestination(arrOfStr[1]);
+        				        ticket.setDate(arrOfStr[2]);
+        				        ticket.setFlightType(arrOfStr[3]);
+        				        ticket.setSeatNo(Integer.parseInt(arrOfStr[4]));
+        				        Passenger p=new Passenger(arrOfStr[5], arrOfStr[7], Integer.parseInt(arrOfStr[8]), arrOfStr[6], arrOfStr[9], arrOfStr[10]);
+        				        ticket.setPassenger(p);
+    				            flights.get(i).getTickets().add(ticket);
+    				            flights.get(i).bookSeat(Integer.parseInt(arrOfStr[4]));
+	        				    
+	        				}
+	        				myReader.close();
+	        		    } catch (FileNotFoundException e) {
+	        		      System.out.println("An error occurred.");
+	        		      e.printStackTrace();
+	        		    }
+	            	}
+	            }
+	            
+	        }
+//			if(flights.get(i).getOrigin().equals(flights))
+			
+		}
 	}
 	public void searchAndBook(Passenger user) {
 		Scanner myObj = new Scanner(System.in);
@@ -278,11 +326,10 @@ public class Admin {
 //		    String filename= f.getOrigin()+f.getDestination()+".csv";
 		    FileWriter fw = new FileWriter(str,true); //the true will append the new data
 		    if(file.length()!=0) {
-		    	fw.write("\n"+f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+(num-1)+","+user.getName()+","+user.getPassportNumber()+","+user.getAddress());//appends the string to the file
+		    	fw.write("\n"+f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+(num-1)+","+user.getName()+","+user.getPassportNumber()+","+user.getAddress()+","+user.getAge()+","+user.getUsername()+","+user.getPassword());//appends the string to the file
 		    }
 		    else {
-		    	fw.write(f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+num+","+user.getName()+","+user.getPassportNumber()+","+user.getAddress());//appends the string to the file
-			    
+		    	fw.write(f.getOrigin()+","+f.getDestination()+","+f.getDate()+","+f.getTypeOfPlane()+","+(num-1)+","+user.getName()+","+user.getPassportNumber()+","+user.getAddress()+","+user.getAge()+","+user.getUsername()+","+user.getPassword());
 		    }
 		    	fw.close();
 		}
