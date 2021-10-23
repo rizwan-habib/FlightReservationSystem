@@ -59,6 +59,7 @@ public class Admin {
 					index=i;
 //					t=j;
 					flights.get(i).getTickets().remove(j);
+					flights.get(i).getSeats()[seat-1]=false;
 				}	
 			}
 		}
