@@ -5,7 +5,13 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Admin admin=new Admin();
-		admin.FlightReading();
+		try {
+			admin.FlightReading();
+				
+		} catch (Exception e) {
+			 System.err.print(e);					
+							// TODO: handle exception
+		}
 		Passenger user=new Passenger();
 		int num=0;
 		Scanner myReader = new Scanner(System.in);
@@ -39,7 +45,13 @@ public class Main {
 				
 			} while (num<1 || num>3);
 			if (num==1) {
-				admin.searchAndBook(user);
+				try {
+					admin.searchAndBook(user);
+				} catch (Exception e) {
+					 System.err.print(e);					
+					// TODO: handle exception
+				}
+				
 			}
 			if (num==2) {
 				try {

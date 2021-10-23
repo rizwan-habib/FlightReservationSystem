@@ -172,7 +172,7 @@ public class Admin {
 		return p;
 	}
 
-	public void FlightReading() {
+	public void FlightReading() throws UnknownFlights {
 		try {
 			File myObj = new File("flights.csv");
 			Scanner myReader = new Scanner(myObj);
@@ -196,7 +196,7 @@ public class Admin {
 			        flight.setSeats(seats);
 			        flights.add(flight);
 			    }
-			    else
+			    else if(arrOfStr[6].equals("Economy"))
 			    {
 			    	Flight flight=new EconomyClass();
 			        flight.setDate(arrOfStr[0]);
@@ -213,6 +213,9 @@ public class Admin {
 					}
 			        flight.setSeats(seats);
 			        flights.add(flight);
+			    }
+			    else {
+			    	throw new UnknownFlights("Unknown Flight\n");
 			    }
 			}
 			myReader.close();
@@ -266,7 +269,7 @@ public class Admin {
 		}
 	}
 	
-	public void searchAndBook(Passenger user) {
+	public void searchAndBook(Passenger user) throws SearchError {
 		Scanner myObj = new Scanner(System.in);
 		System.out.print("Enter Departure City: ");
 		
@@ -311,7 +314,7 @@ public class Admin {
 			
 		}
 		if(!flag) {
-			System.out.println("Flights not Found");
+			throw new SearchError("Flight did not found\n");
 		}
 		else if (direct_flights.size()>0) {
 			Scanner myObj1 = new Scanner(System.in);
@@ -331,8 +334,16 @@ public class Admin {
 				number=myObj1.nextInt();
 				myObj1.nextLine();
 			}while(number>direct_flights.size() || number<0);
-			if(number!=0)
-				directBooking(direct_flights.get(number-1),user);
+			if(number!=0) {
+				try {
+					directBooking(direct_flights.get(number-1),user);
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.err.print(e);
+								
+				}	
+			}
+			
 		}
 		else if (indirect_flights1.size()>0) {
 			Scanner myObj1 = new Scanner(System.in);
@@ -353,12 +364,18 @@ public class Admin {
 				number=myObj1.nextInt();
 				myObj1.nextLine();
 			}while(number>indirect_flights1.size() || number<0);
-			if(number!=0)
-				indirectBooking(indirect_flights1.get(number-1),indirect_flights2.get(number-1),user);
-	
+			if(number!=0) {
+				try {
+					indirectBooking(indirect_flights1.get(number-1),indirect_flights2.get(number-1),user);					
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.err.print(e);
+				}
+
+			}
 		}
 	}
-	private void directBooking(Flight f,Passenger user) {
+	private void directBooking(Flight f,Passenger user) throws SeatNotFoundException {
 		f.getPassengers().add(user);
 		int num=0;
 		Scanner myReader = new Scanner(System.in);
@@ -367,7 +384,12 @@ public class Admin {
 			System.out.print("Enter a available seat number for flight "+f.getOrigin()+" to "+f.getDestination()+": ");
 			num = myReader.nextInt();
 			myReader.nextLine();
-			
+			if(f.getTypeOfPlane().equals("Business")) {
+				if (num<1||num>80) {
+					throw new SeatNotFoundException(
+			                "Could not find Ticket ");
+				}
+			}
 		} while (f.getSeats()[num-1]);
 		f.bookSeat(num-1);
 		Ticket t=new Ticket(f.getOrigin(), f.getDestination(), f.getDate(),f.getTypeOfPlane() , num-1, user);
@@ -403,7 +425,7 @@ public class Admin {
 		    System.err.println("IOException: " + ioe.getMessage());
 		}
 	}
-	private void indirectBooking(Flight f1,Flight f2,Passenger user) {
+	private void indirectBooking(Flight f1,Flight f2,Passenger user) throws SeatNotFoundException {
 //		System.out.println("booking done");
 //		f1.display();
 //		f2.display();
